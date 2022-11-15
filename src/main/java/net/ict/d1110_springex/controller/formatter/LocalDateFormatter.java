@@ -1,4 +1,4 @@
-package net.ict.d1110_springex.controller.fomatter;
+package net.ict.d1110_springex.controller.formatter;
 
 import org.springframework.format.Formatter;
 
