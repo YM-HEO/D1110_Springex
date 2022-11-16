@@ -2,6 +2,8 @@ package net.ict.springex.mapper;
 
 import lombok.extern.log4j.Log4j2;
 import net.ict.d1110_springex.domain.TodoVO;
+import net.ict.d1110_springex.dto.PageRequestDTO;
+import net.ict.d1110_springex.dto.PageResponseDTO;
 import net.ict.d1110_springex.mapper.TimeMapper2;
 import net.ict.d1110_springex.mapper.TodoMapper;
 import org.junit.jupiter.api.Test;
@@ -39,10 +41,20 @@ public class TodoMapperTest {
 
     }
 
+//    @Test
+//    public void testSelectAll(){
+//        List<TodoVO> voList = todoMapper.selectAll();
+//        voList.forEach(vo -> log.info(vo));
+//    }
+
     @Test
-    public void testSelectAll(){
-        List<TodoVO> voList = todoMapper.selectAll();
-        voList.forEach(vo -> log.info(vo));
+    public void testSelectList(){
+        PageRequestDTO pageRequestDTO = PageRequestDTO.builder()
+                .page(1)
+                .size(10)
+                .build();
+        List<TodoVO> voList = todoMapper.selectList(pageRequestDTO);
+        voList.forEach(vo->log.info(vo));
     }
 
 

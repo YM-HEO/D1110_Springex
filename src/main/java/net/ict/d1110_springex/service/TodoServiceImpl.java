@@ -3,6 +3,8 @@ package net.ict.d1110_springex.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import net.ict.d1110_springex.domain.TodoVO;
+import net.ict.d1110_springex.dto.PageRequestDTO;
+import net.ict.d1110_springex.dto.PageResponseDTO;
 import net.ict.d1110_springex.dto.TodoDTO;
 import net.ict.d1110_springex.mapper.TodoMapper;
 import org.modelmapper.ModelMapper;
@@ -29,20 +31,35 @@ public class TodoServiceImpl implements TodoService{
     }
 
     @Override
-    public List<TodoDTO> getAll() {
-        List<TodoDTO> dtoList = todoMapper.selectAll().stream()
+    public PageResponseDTO<TodoDTO> getList(PageRequestDTO pageRequestDTO) {
+        List<TodoVO> voList = todoMapper.selectList(pageRequestDTO);
+        List<TodoDTO> dtoList = voList.stream()
                 .map(vo -> modelMapper.map(vo, TodoDTO.class))
                 .collect(Collectors.toList());
-        return dtoList;
-
-        //vo는 모델맵퍼를 통해 todoDTO 타입으로 변환되고
-        //Collectors를 통해 하나의 리스트로 묶음처리하여 변환해라
-
-        /*  List<TodoVO>를  List<TodoDTO>로 변환하는 작업을 stream을 이용하여
-            각 TodoVO는 map()을 통해서 TodoDTO로 바꾸고
-            collect()를 이용하여
-             List<TodoDTO>로 묶어준다.*/
+        int total = todoMapper.getCount(pageRequestDTO);
+        PageResponseDTO<TodoDTO> pageResponseDTO = PageResponseDTO.<TodoDTO>withAll()
+                .dtoList(dtoList)
+                .total(total)
+                .pageRequestDTO(pageRequestDTO)
+                .build();
+        return pageResponseDTO;
     }
+
+//    @Override
+//    public List<TodoDTO> getAll() {
+//        List<TodoDTO> dtoList = todoMapper.selectAll().stream()
+//                .map(vo -> modelMapper.map(vo, TodoDTO.class))
+//                .collect(Collectors.toList());
+//        return dtoList;
+//
+//        //vo는 모델맵퍼를 통해 todoDTO 타입으로 변환되고
+//        //Collectors를 통해 하나의 리스트로 묶음처리하여 변환해라
+//
+//        /*  List<TodoVO>를  List<TodoDTO>로 변환하는 작업을 stream을 이용하여
+//            각 TodoVO는 map()을 통해서 TodoDTO로 바꾸고
+//            collect()를 이용하여
+//             List<TodoDTO>로 묶어준다.*/
+//    }
 
     @Override
     public TodoDTO getOne(Long tno) { //맵퍼로 받아와서 모델맵퍼로 dto의 클래스 타입으로 변환

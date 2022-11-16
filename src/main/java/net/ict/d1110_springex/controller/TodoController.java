@@ -2,6 +2,8 @@ package net.ict.d1110_springex.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import net.ict.d1110_springex.dto.PageRequestDTO;
+import net.ict.d1110_springex.dto.PageResponseDTO;
 import net.ict.d1110_springex.dto.TodoDTO;
 import net.ict.d1110_springex.service.TodoService;
 import org.springframework.stereotype.Controller;
@@ -21,25 +23,30 @@ public class TodoController {
     //실제로 동작하도록 service를 컨트롤러와 연결
     private final TodoService todoService;
 
-    @RequestMapping("/list")  // 최종경로: todo슬래쉬list
+    @RequestMapping("/list")  // 최종경로: /todo/list
 
-//    public void list(){
-//        log.info("..................todo list()........................");
+    public void list(@Valid PageRequestDTO pageRequestDTO, BindingResult bindingResult, Model model){
+        log.info("..................todo list........................");
+        if(bindingResult.hasErrors()){
+            pageRequestDTO = PageRequestDTO.builder().build();
+        }
+        model.addAttribute("responseDTO", todoService.getList(pageRequestDTO));
+        //model에는 'dtoList'이름으로 목록데이터가 담겨있다.
+    }
+
+//    public void list(Model model){
+//
+//        log.info("..................todo list........................");
+//        model.addAttribute("dtoList",todoService.getAll());
+//        //model에는 'dtoList'이름으로 목록데이터가 담겨있다.
+//        // todoService.getAll()를 이용해서 dtoList에 담는다.
+//
 //    }
 
-    public void list(Model model){
-
-        log.info("..................todo list........................");
-        model.addAttribute("dtoList",todoService.getAll());
-        //model에는 'dtoList'이름으로 목록데이터가 담겨있다.
-        // todoService.getAll()를 이용해서 dtoList에 담는다.
-
-    }
-
-    @RequestMapping(value = "/register", method = RequestMethod.GET) // 최종경로: todo슬래쉬register
-    public void registerGet() {
-        log.info("................todo register() get..................");
-    }
+//    @RequestMapping(value = "/register", method = RequestMethod.GET) // 최종경로: todo슬래쉬register
+//    public void registerGet() {
+//        log.info("................todo register() get..................");
+//    }
 
 //    @PostMapping("/register")
 //    public void registerPost() {
