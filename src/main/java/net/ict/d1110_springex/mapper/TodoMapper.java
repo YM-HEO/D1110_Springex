@@ -15,4 +15,5 @@ public interface TodoMapper {
     void update(TodoVO todoVO);
     List<TodoVO> selectList(PageRequestDTO pageRequestDTO);
     int getCount(PageRequestDTO pageRequestDTO);
+//    String getLink(PageRequestDTO pageRequestDTO);
 }
