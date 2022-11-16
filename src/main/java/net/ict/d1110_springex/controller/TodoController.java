@@ -75,7 +75,7 @@ public class TodoController {
 //    }
 
     @GetMapping({"/read", "/modify"}) //배열 표기법으로 한번에 read, modify 기능을 처리
-    public void read(Long tno, Model model){
+    public void read(PageRequestDTO pageRequestDTO, Long tno, Model model){
         TodoDTO todoDTO = todoService.getOne(tno);
         log.info(todoDTO);
         model.addAttribute("dto",todoDTO);
